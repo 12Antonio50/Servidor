@@ -3,13 +3,21 @@ require('dotenv').config();
 const mongoose = require("mongoose");
 const app = require("./src/app");
 
+// Usar variables de entorno
+const { 
+    DB_USER, 
+    DB_PASSWORD, 
+    DB_HOST, 
+    DB_NAME, 
+    IP_SERVER, 
+    API_VERSION 
+} = process.env;
 
 const PORT = process.env.PORT || 4000;
-
 //Inicio del servidor de la aplicación y la conexión de la base de datos
 async function main() {
     try {
-        await mongoose.connect (
+        await mongoose.connect(
             `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
         );
         app.listen(PORT, () => {
@@ -20,5 +28,5 @@ async function main() {
     }
 }
 
-//ejecuta la función de arriba para establecer la conexión
+// Ejecuta la función para establecer la conexión
 main().catch((err) => console.log(err));
