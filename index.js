@@ -14,14 +14,16 @@ const {
 } = process.env;
 
 const PORT = process.env.PORT || 4000;
-//Inicio del servidor de la aplicación y la conexión de la base de datos
+
 async function main() {
     try {
+        console.log('Conectando a MongoDB...');
         await mongoose.connect(
             `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
         );
+        console.log('Conexión a MongoDB establecida.');
         app.listen(PORT, () => {
-            console.log(`http://${IP_SERVER}:${PORT}/API/${API_VERSION}`);
+            console.log(`Servidor escuchando en http://${IP_SERVER}:${PORT}/API/${API_VERSION}`);
         });
     } catch (error) {
         console.error('Error al iniciar la aplicación:', error);
