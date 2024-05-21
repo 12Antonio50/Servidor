@@ -1,7 +1,7 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { API_VERSION } = require("./constans");
 //require("dotenv").config({ path: ".env" });
 
 const app = express();
