@@ -113,7 +113,7 @@ async function crearUsuario(req, res, modelo) {
             from: OUTLOOK_EMAIL,
             to: correo,
             subject: "Creación de cuenta en la aplicación de encuestas QUICK POLLS",
-            text: `Nos complace informarle que se ha creado una cuenta para usted en nuestra aplicación de encuestas con los siguientes datos:\n\n\nNombre: ${nombre}\nApellido paterno: ${apellido_paterno}\nApellido materno: ${apellido_materno}\nCorreo: ${correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${password}\n\n\nDiríjase al siguiente enlace para iniciar sesión: '<Link de la aplicación web>' Esta designación le otorga privilegios adicionales para colaborar en la gestión y supervisión de encuestas en nuestra plataforma.`,
+            text: `Nos complace informarle que se ha creado una cuenta para usted en nuestra aplicación de encuestas con los siguientes datos:\n\n\nNombre: ${nombre}\nApellido paterno: ${apellido_paterno}\nApellido materno: ${apellido_materno}\nCorreo: ${correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${password}\n\n\nDiríjase al siguiente enlace para iniciar sesión: https://rlgjvn6n-3000.usw3.devtunnels.ms/ Esta designación le otorga privilegios adicionales para colaborar en la gestión y supervisión de encuestas en nuestra plataforma.`,
         };
 
         const infoCorreo = await transporter.sendMail(opcionesCorreo);
@@ -188,7 +188,7 @@ async function crearListaUsuario(req, res, modelo) {
                     from: OUTLOOK_EMAIL,
                     to: correo,
                     subject: "Creación de cuenta en la aplicación de encuestas QUICK POLLS",
-                    text: `Nos complace informarle que se ha creado una cuenta para usted en nuestra aplicación de encuestas con los siguientes datos:\n\n\nNombre: ${nombre}\nApellido paterno: ${apellido_paterno}\nApellido materno: ${apellido_materno}\nCorreo: ${correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${passwordArray[k]}\n\n\nDiríjase al siguiente enlace para iniciar sesión: '<Link de la aplicación web>' Esta designación le otorga privilegios adicionales para colaborar en la gestión y supervisión de encuestas en nuestra plataforma.`,
+                    text: `Nos complace informarle que se ha creado una cuenta para usted en nuestra aplicación de encuestas con los siguientes datos:\n\n\nNombre: ${nombre}\nApellido paterno: ${apellido_paterno}\nApellido materno: ${apellido_materno}\nCorreo: ${correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${passwordArray[k]}\n\n\nDiríjase al siguiente enlace para iniciar sesión: https://rlgjvn6n-3000.usw3.devtunnels.ms/ Esta designación le otorga privilegios adicionales para colaborar en la gestión y supervisión de encuestas en nuestra plataforma.`,
                 };
 
                 // Enviar correo con control de tasa
