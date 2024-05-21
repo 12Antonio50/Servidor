@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const app = require("./app");
+const app = require("./src/app");
 
 const {
     DB_HOST,
@@ -8,7 +8,7 @@ const {
     API_VERSION,
     IP_SERVER,
     DB_NAME,
-} = require("./constans");
+} = require("./src/constans");
 
 const PORT = process.env.PORT || 4000;
 
