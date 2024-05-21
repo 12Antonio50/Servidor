@@ -1,15 +1,11 @@
+require('dotenv').config();
+
 const Usuario = require("../models/usuarios");
 const UsuariosRoot = require("../models/RootWorking/usuariosRootWorking");
 const Cursos = require("../models/curso");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const moment = require("moment");
-const {
-    OUTLOOK_EMAIL,
-    OUTLOOK_PASSWORD,
-    user_SendGrid,
-    apikey,
-} = require("../constans");
 
 /*
 Administrador
