@@ -1,6 +1,7 @@
 require('dotenv').config();
-const jwt = require("jsonwebtoken");
 
+const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = process.env;
 
 function crearAccessToken(usuario) {
     const expToken = new Date();

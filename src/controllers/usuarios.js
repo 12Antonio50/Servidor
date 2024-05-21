@@ -6,6 +6,12 @@ const Cursos = require("../models/curso");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const moment = require("moment");
+const {
+    OUTLOOK_EMAIL,
+    OUTLOOK_PASSWORD,
+    user_SendGrid,
+    apikey,
+} = process.env;
 
 /*
 Administrador

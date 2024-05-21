@@ -1,9 +1,11 @@
+require('dotenv').config();
+
 const Encuestas = require("../models/encuestas");
 const {
     OUTLOOK_EMAIL,
     user_SendGrid,
     apikey,
-} = require("../constans");
+} = process.env;
 const nodemailer = require("nodemailer");
 
 /**
