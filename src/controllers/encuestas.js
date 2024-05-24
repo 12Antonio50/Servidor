@@ -299,7 +299,7 @@ async function obtenerEncuestascreadas(req, res) {
 
         const encuestas = await Encuestas.find();
 
-        // Objeto para almacenar la cantidad de encuestas por mes y el porcentaje correspondiente
+        // Objeto para almacenar la cantidad de encuestas por mes, el porcentaje correspondiente y los nombres de las encuestas
         const encuestasPorMes = {};
 
         // Iterar sobre todas las encuestas para contar las encuestas por mes en el año especificado
@@ -311,10 +311,12 @@ async function obtenerEncuestascreadas(req, res) {
             if (ano === parseInt(anio)) { // Verificar si la encuesta es del año especificado
                 // Verificar si ya existe una entrada para este mes
                 if (!encuestasPorMes[mes]) {
-                    encuestasPorMes[mes] = { total: 0, porcentaje: 0 };
+                    encuestasPorMes[mes] = { total: 0, porcentaje: 0, nombres: [] };
                 }
                 // Incrementar el contador de encuestas para este mes
                 encuestasPorMes[mes].total++;
+                // Agregar el nombre de la encuesta a la lista de nombres
+                encuestasPorMes[mes].nombres.push(encuesta.titulo);
             }
         });
 

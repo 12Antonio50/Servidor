@@ -136,7 +136,7 @@ async function obtenerUnicoPublico(req, res) {
 
 async function obtenerPublicocreados(req, res) {
     try {
-        const { anio } = req.body; 
+        const { anio } = req.body;
 
         const publicos = await Publico.find();
 
@@ -147,11 +147,12 @@ async function obtenerPublicocreados(req, res) {
             const mes = fecha.getMonth() + 1;
             const ano = fecha.getFullYear();
 
-            if (ano === parseInt(anio)) { 
+            if (ano === parseInt(anio)) {
                 if (!publicosPorMes[mes]) {
-                    publicosPorMes[mes] = { total: 0, porcentaje: 0 };
+                    publicosPorMes[mes] = { total: 0, porcentaje: 0, nombres: [] };
                 }
                 publicosPorMes[mes].total++;
+                publicosPorMes[mes].nombres.push(publico.nombre); // Asumiendo que `publico.nombre` es el campo que contiene el nombre
             }
         });
 
@@ -170,7 +171,6 @@ async function obtenerPublicocreados(req, res) {
         res.status(500).send({ msg: "Error al procesar la solicitud" });
     }
 }
-
 
 module.exports = {
     crearPublicoIndidual,

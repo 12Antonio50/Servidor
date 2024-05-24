@@ -7,57 +7,53 @@ const moment = require("moment");
 // Define una variable global para almacenar la última ejecución
 let ultimaEjecucion = moment();
 
-// Función para actualizar el estado de los cursos vencidos
+// Función para actualizar el estado de los cursos
 async function actualizarEstadoCursos() {
     try {
         // Obtener la fecha actual
         const fechaActual = moment();
 
-        // Buscar los cursos cuya fecha de finalización haya pasado
+        // Buscar todos los cursos cuya fecha de finalización haya pasado
         const cursosVencidos = await Curso.find({
             fin: { $lt: fechaActual.toDate() } // Convertir a objeto Date
         });
 
         console.log(cursosVencidos)
 
-        // Actualizar cada curso vencido encontrado
+        // Actualizar cada curso encontrado
         for (const curso of cursosVencidos) {
             // Convertir la fecha de finalización de cadena de texto a objeto Moment
             const fechaFinalizacion = moment(curso.fin, 'YYYY-MM-DD');
             // Comparar las fechas utilizando objetos Moment
             if (fechaFinalizacion.isBefore(fechaActual)) { // Sin especificar 'day' para comparar horas exactas
-                // Si la fecha de finalización es anterior a la fecha actual
-                // Verificar si el curso ya está marcado como no disponible
-                if (!curso.disponible) {
-                    // Cambiar la disponibilidad a true
-                    curso.disponible = true;
+                // Cambiar la disponibilidad a true
+                curso.disponible = true;
 
-                    // Buscar todas las encuestas vinculadas al curso por título
-                    const encuestasVinculadas = await Encuestas.find({ titulo: { $in: curso.encuestas } });
+                // Buscar todas las encuestas vinculadas al curso por título
+                const encuestasVinculadas = await Encuestas.find({ titulo: { $in: curso.encuestas } });
 
-                    // Iterar sobre las encuestas y cambiar su disponibilidad a true
-                    for (const encuesta of encuestasVinculadas) {
-                        encuesta.disponible = true;
-                        await encuesta.save();
-                    }
+                // Iterar sobre las encuestas y cambiar su disponibilidad a true
+                for (const encuesta of encuestasVinculadas) {
+                    encuesta.disponible = true;
+                    await encuesta.save();
+                }
 
-                    // Desvincular las encuestas del curso vencido
-                    curso.encuestas = [];
-                    // Desvincular los usuarios
-                    curso.publico = [];
-                    await curso.save();
+                // Desvincular las encuestas del curso
+                curso.encuestas = [];
+                // Desvincular los usuarios
+                curso.publico = [];
+                await curso.save();
 
-                    // Buscar todos los usuarios que tienen este curso y eliminarlo de su lista de cursos
-                    const usuariosConCurso = await Usuario.find({ cursos: curso.curso });
-                    console.log(usuariosConCurso)
+                // Buscar todos los usuarios que tienen este curso y eliminarlo de su lista de cursos
+                const usuariosConCurso = await Usuario.find({ cursos: curso.curso });
+                console.log(usuariosConCurso)
 
-                    // Quitar el curso de cada usuario y guardar los cambios
-                    for (const usuario of usuariosConCurso) {
-                        console.log("Cursos del usuario antes de la eliminación:", usuario.cursos);
-                        usuario.cursos = usuario.cursos.filter(c => c !== curso.curso);
-                        console.log("Cursos del usuario después de la eliminación:", usuario.cursos);
-                        await usuario.save();
-                    }
+                // Quitar el curso de cada usuario y guardar los cambios
+                for (const usuario of usuariosConCurso) {
+                    console.log("Cursos del usuario antes de la eliminación:", usuario.cursos);
+                    usuario.cursos = usuario.cursos.filter(c => c !== curso.curso);
+                    console.log("Cursos del usuario después de la eliminación:", usuario.cursos);
+                    await usuario.save();
                 }
             }
         }
@@ -69,6 +65,7 @@ async function actualizarEstadoCursos() {
         console.error("Error al actualizar el estado de los cursos:", error);
     }
 }
+
 
 // Programar la ejecución periódica de la función actualizarEstadoCursos
 setInterval(actualizarEstadoCursos, 24 * 60 * 60 * 1000); // Ejecutar cada 24 horas (86400000 milisegundos)
@@ -410,10 +407,11 @@ async function cursosInactivosConNumeroPublico(req, res) {
         // Buscar los cursos cuya disponibilidad sea false
         const cursosInactivos = await Curso.find({ disponible: false });
 
-        // Mapear los cursos para agregar el número de público
+        // Mapear los cursos para agregar el número de público y los nombres del público
         const cursosConNumeroPublico = cursosInactivos.map(curso => ({
             ...curso._doc,
-            numeroPublico: curso.publico.length
+            numeroPublico: curso.publico.length,
+            nombresPublico: curso.publico.map(p => p.nombre) // Asumiendo que cada objeto en curso.publico tiene un campo 'nombre'
         }));
 
         // Verificar si hay cursos inactivos disponibles
@@ -422,8 +420,9 @@ async function cursosInactivosConNumeroPublico(req, res) {
                 msg: "Error, no se encontraron cursos inactivos",
             });
         } else {
-            // Enviar la lista de cursos inactivos con el número de público como respuesta
+            // Enviar la lista de cursos inactivos con el número de público y los nombres del público como respuesta
             res.status(200).send(cursosConNumeroPublico);
+            console.log("Cursos", cursosConNumeroPublico)
         }
     } catch (error) {
         // Manejar posibles errores durante la ejecución
