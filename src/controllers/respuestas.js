@@ -121,7 +121,7 @@ async function obtenerPorcentajesEscalaNumerica(req, res) {
         });
 
         // Imprimir los resultados en la consola para depuración
-        console.log("Resultados finales:", resultados);
+        //console.log("Resultados finales:", resultados);
 
         // Devolver los resultados
         res.status(200).send({ resultados });

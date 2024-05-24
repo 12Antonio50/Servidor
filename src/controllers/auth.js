@@ -27,7 +27,7 @@ async function login(req, res) {
         bcrypt.compare(password, existenciaUsuario.password, (bcryptError, check) => {
             if (bcryptError) {
                 res.status(500).send({ msg: "Error del servidor" });
-                console.log(bcryptError);
+                //console.log(bcryptError);
             } else if (!check) {
                 res.status(400).send({ msg: "Error en la comparación del usuario" });
             } else {

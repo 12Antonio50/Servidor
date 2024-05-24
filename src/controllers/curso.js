@@ -18,7 +18,7 @@ async function actualizarEstadoCursos() {
             fin: { $lt: fechaActual.toDate() } // Convertir a objeto Date
         });
 
-        console.log(cursosVencidos)
+        //console.log(cursosVencidos)
 
         // Actualizar cada curso encontrado
         for (const curso of cursosVencidos) {
@@ -46,13 +46,13 @@ async function actualizarEstadoCursos() {
 
                 // Buscar todos los usuarios que tienen este curso y eliminarlo de su lista de cursos
                 const usuariosConCurso = await Usuario.find({ cursos: curso.curso });
-                console.log(usuariosConCurso)
+                //console.log(usuariosConCurso)
 
                 // Quitar el curso de cada usuario y guardar los cambios
                 for (const usuario of usuariosConCurso) {
-                    console.log("Cursos del usuario antes de la eliminación:", usuario.cursos);
+                    //console.log("Cursos del usuario antes de la eliminación:", usuario.cursos);
                     usuario.cursos = usuario.cursos.filter(c => c !== curso.curso);
-                    console.log("Cursos del usuario después de la eliminación:", usuario.cursos);
+                    //console.log("Cursos del usuario después de la eliminación:", usuario.cursos);
                     await usuario.save();
                 }
             }
@@ -422,7 +422,7 @@ async function cursosInactivosConNumeroPublico(req, res) {
         } else {
             // Enviar la lista de cursos inactivos con el número de público y los nombres del público como respuesta
             res.status(200).send(cursosConNumeroPublico);
-            console.log("Cursos", cursosConNumeroPublico)
+            //console.log("Cursos", cursosConNumeroPublico)
         }
     } catch (error) {
         // Manejar posibles errores durante la ejecución

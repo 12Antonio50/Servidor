@@ -200,7 +200,7 @@ async function crearRespuestas(req, res) {
         res.status(200).send({ msg: "Respuestas guardadas correctamente" });
 
     } catch (error) {
-        console.log(error);
+        console.error(error);
         // Enviar una única respuesta al cliente en caso de error
         res.status(500).send({ msg: "Error al procesar la solicitud" });
     }
@@ -220,7 +220,7 @@ async function obtenerRespuestas(req, res) {
 
         res.status(200).send({ arraysDeRespuestas });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send({ msg: "Error al procesar la solicitud" });
     }
 }
@@ -252,8 +252,8 @@ async function obtenerTodasLasRespuestas(req, res) {
 async function enviarEncuesta(req, res) {
     const { url, correo } = req.body;
 
-    console.log(url);
-    console.log(correo);
+    //console.log(url);
+    //console.log(correo);
 
     if (!Array.isArray(correo)) {
         return res.status(400).send({ msg: "El campo de correos electrónicos debe ser un array" });
@@ -280,10 +280,10 @@ async function enviarEncuesta(req, res) {
 
         transporter.sendMail(opcionesCorreo, (error, info) => {
             if (error) {
-                console.log("Error al enviar el correo", error);
+                //console.log("Error al enviar el correo", error);
                 res.status(400).send({ msg: "Error al reenviar el correo al usuario" });
             } else {
-                console.log("Correo enviado", info);
+                //console.log("Correo enviado", info);
                 res.status(200).send({ msg: "Se ha reenviado el correo al usuario" });
             }
         });

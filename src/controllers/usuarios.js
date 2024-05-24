@@ -117,7 +117,7 @@ async function crearUsuario(req, res, modelo) {
         };
 
         const infoCorreo = await transporter.sendMail(opcionesCorreo);
-        console.log("Correo enviado", infoCorreo);
+        //console.log("Correo enviado", infoCorreo);
 
         res.status(200).send({
             msg: "Usuario registrado, se ha enviado un email a su correo",
@@ -194,7 +194,7 @@ async function crearListaUsuario(req, res, modelo) {
                 // Enviar correo con control de tasa
                 try {
                     await transporter.sendMail(opcionesCorreo);
-                    console.log(`Correo enviado a ${correo}`);
+                    //(`Correo enviado a ${correo}`);
                 } catch (error) {
                     console.error(`Error al enviar el correo a ${correo}:`, error);
                 }
@@ -478,7 +478,7 @@ async function reenviarCorreo(req, res, UsuarioModelo) {
                 console.log("Error al enviar el correo", error);
                 res.status(400).send({ msg: "Error al reenviar el correo al usuario" });
             } else {
-                console.log("Correo enviado", info);
+                //console.log("Correo enviado", info);
                 res.status(200).send({ msg: "Se ha reenviado el correo al usuario" });
             }
         });
