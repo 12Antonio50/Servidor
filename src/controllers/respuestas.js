@@ -65,6 +65,7 @@ async function obtenerPorcentajesGenerales(req, res) {
         res.status(500).send({ msg: "Error al procesar la solicitud" });
     }
 }
+
 async function obtenerPorcentajesEscalaNumerica(req, res) {
     try {
         const { titulo } = req.body;
@@ -87,10 +88,13 @@ async function obtenerPorcentajesEscalaNumerica(req, res) {
         // Obtener las preguntas de tipo 'escalaNumerica'
         const preguntasEscalaNumerica = encuestaEncontrada.preguntas.filter(pregunta => pregunta.tipo === 'escalaNumerica');
 
-        // Calcular el promedio de las respuestas de 'escalaNumerica'
+        // Inicializar un objeto para contabilizar repeticiones
+        const conteoRepeticiones = {};
+
+        // Iterar sobre las preguntas de escala numérica
         preguntasEscalaNumerica.forEach(pregunta => {
-            let totalRespuestas = 0;
-            let totalValorRespuestas = 0;
+            // Reiniciar el conteo para cada pregunta
+            conteoRepeticiones[pregunta._id] = {};
 
             // Iterar sobre las respuestas de la encuesta
             encuestaEncontrada.respuestas.forEach(respuestaObj => {
@@ -100,28 +104,19 @@ async function obtenerPorcentajesEscalaNumerica(req, res) {
                         if ('escalaNumerica' in respuesta) {
                             const respuestaValor = parseInt(respuesta.escalaNumerica);
                             if (!isNaN(respuestaValor)) {
-                                totalValorRespuestas += respuestaValor;
-                                totalRespuestas += 1;
+                                // Incrementar el conteo de repeticiones para este valor
+                                conteoRepeticiones[pregunta._id][respuestaValor] = (conteoRepeticiones[pregunta._id][respuestaValor] || 0) + 1;
                             }
                         }
                     }
                 });
             });
 
-            // Calcular el promedio solo si hay respuestas
-            const promedio = totalRespuestas > 0 ? totalValorRespuestas / totalRespuestas : 0;
-
-            // Obtener las respuestas asociadas a esta pregunta
-            const respuestasAsociadas = encuestaEncontrada.respuestas.filter(respuestaObj => {
-                return respuestaObj.respuestasArray.some(respuesta => {
-                    return respuesta.preguntas._id.toString() === pregunta._id.toString();
-                });
-            });
-
+            // Agregar el conteo de repeticiones a los resultados
             resultados.push({
                 pregunta: pregunta.texto,
                 tipo: 'escalaNumerica',
-                promedio: promedio,
+                conteoRepeticiones: conteoRepeticiones[pregunta._id],
             });
         });
 
