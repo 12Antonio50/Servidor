@@ -11,7 +11,7 @@ const OUTLOOK_PASSWORD = "Instituto_Fiscal_Empresarial_S.C2023-11-15";
 //Sengrid
 const user_SendGrid = "SCQuickAssist@outlook.com";
 
-const apikey = "obkpomwltslohhuo";
+const apikey = "ypprlscqpyvvwate";
 //const apikey = "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";
 
 //JWT SECRET
