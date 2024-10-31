@@ -458,7 +458,7 @@ async function reenviarCorreo(req, res, UsuarioModelo) {
         baseUrl = "https://espacios.rootworking.mx/";  // URL para rootWorking
     } else {
         UsuarioModelo = Usuario;
-        baseUrl = "https://otra.url/";  // URL para otros usuarios
+        baseUrl = "https://encuestasscquick.rootworking.mx/";  // URL para otros usuarios
     }
 
     try {
