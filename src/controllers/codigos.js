@@ -266,15 +266,12 @@ const enviarCodigo = async (req, res) => {
         // Crear el transporte de nodemailer
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.user_SendGrid,
                 pass: process.env.apikey,
             },
-            tls: {
-                rejectUnauthorized: false
-            }
         });
 
         const logoURL = 'https://rootworking.mx/wp-content/uploads/2023/02/WhatsApp-Image-2023-02-14-at-17.26.23-1-e1676573595151.jpeg';
@@ -464,15 +461,17 @@ async function obtenerCodigosPorMes(req, res) {
                 $group: {
                     _id: "$mesAño",
                     cantidad: { $sum: 1 },
-                    detalles: { $push: { 
-                        codigo: "$codigo",
-                        fechaGeneracion: "$fechaGeneracion",
-                        diasRenta: "$diasRenta",
-                        horaInicio: "$horaInicio",
-                        horaFin: "$horaFin",
-                        integrantes: "$integrantes",
-                        estado: "$estado"
-                    }}
+                    detalles: {
+                        $push: {
+                            codigo: "$codigo",
+                            fechaGeneracion: "$fechaGeneracion",
+                            diasRenta: "$diasRenta",
+                            horaInicio: "$horaInicio",
+                            horaFin: "$horaFin",
+                            integrantes: "$integrantes",
+                            estado: "$estado"
+                        }
+                    }
                 }
             },
             { $sort: { _id: 1 } }

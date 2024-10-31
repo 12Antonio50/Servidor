@@ -109,15 +109,12 @@ async function crearUsuario(req, res, modelo) {
         // Envío del correo
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: user_SendGrid,
                 pass: apikey,
             },
-            tls: {
-                rejectUnauthorized: false
-            }
         });
 
         // Construir el mensaje del correo incluyendo la URL específica
@@ -153,15 +150,12 @@ async function crearListaUsuario(req, res, modelo) {
     // Envío del correo
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
+        port: 465,
+        secure: true,
         auth: {
             user: user_SendGrid,
             pass: apikey,
         },
-        tls: {
-            rejectUnauthorized: false
-        }
     });
 
     // Creando password para cada usuario en el array
@@ -518,15 +512,12 @@ async function reenviarCorreo(req, res, UsuarioModelo) {
         // Envío de correo al usuario con la contraseña actualizada
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
-            port: 587,
-            secure: false, // Iniciar con false para iniciar una conexión no segura
+            port: 465,
+            secure: true,
             auth: {
                 user: user_SendGrid,
                 pass: apikey,
             },
-            tls: {
-                rejectUnauthorized: false
-            }
         });
 
         // Contenido del correo electrónico

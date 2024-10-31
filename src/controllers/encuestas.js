@@ -267,15 +267,12 @@ async function enviarEncuesta(req, res) {
 
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: user_SendGrid,
                 pass: apikey,
             },
-            tls: {
-                rejectUnauthorized: false
-            }
         });
 
         const opcionesCorreo = {

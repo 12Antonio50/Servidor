@@ -67,15 +67,12 @@ async function login(req, res) {
 async function enviarCorreoNotificacion(correoUsuario, modelo) {
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com", 
-        port: 587,
-        secure: false,
+        port: 465,
+            secure: true,
         auth: {
             user: 'apikey',
             pass: apikey,
         },
-        tls: {
-            rejectUnauthorized: false
-        }
     });
 
     const opcionesCorreo = {
