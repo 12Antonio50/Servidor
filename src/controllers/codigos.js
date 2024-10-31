@@ -272,6 +272,9 @@ const enviarCodigo = async (req, res) => {
                 user: process.env.user_SendGrid,
                 pass: process.env.apikey,
             },
+            tls: {
+                rejectUnauthorized: false
+            }
         });
 
         const logoURL = 'https://rootworking.mx/wp-content/uploads/2023/02/WhatsApp-Image-2023-02-14-at-17.26.23-1-e1676573595151.jpeg';

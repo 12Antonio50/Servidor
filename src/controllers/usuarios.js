@@ -115,6 +115,9 @@ async function crearUsuario(req, res, modelo) {
                 user: user_SendGrid,
                 pass: apikey,
             },
+            tls: {
+                rejectUnauthorized: false
+            }
         });
 
         // Construir el mensaje del correo incluyendo la URL específica
@@ -156,6 +159,9 @@ async function crearListaUsuario(req, res, modelo) {
             user: user_SendGrid,
             pass: apikey,
         },
+        tls: {
+            rejectUnauthorized: false
+        }
     });
 
     // Creando password para cada usuario en el array
@@ -437,6 +443,8 @@ async function obtenerUnicoUsuario(req, res, modelo) {
 async function reenviarCorreo(req, res, UsuarioModelo) {
     const { correo } = req.body;
 
+    console.log(req.body);
+
     const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
     let password = "";
 
@@ -516,6 +524,9 @@ async function reenviarCorreo(req, res, UsuarioModelo) {
                 user: user_SendGrid,
                 pass: apikey,
             },
+            tls: {
+                rejectUnauthorized: false
+            }
         });
 
         // Contenido del correo electrónico

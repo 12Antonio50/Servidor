@@ -273,6 +273,9 @@ async function enviarEncuesta(req, res) {
                 user: user_SendGrid,
                 pass: apikey,
             },
+            tls: {
+                rejectUnauthorized: false
+            }
         });
 
         const opcionesCorreo = {

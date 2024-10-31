@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const { authAdmin, authAdminAP, authAdminRecepcionista } = require("../middleware/auth");
 const oficinaController = require("../controllers/oficina");
-const upload = require("../controllers/multer");
+const upload = require("../controllers/RootWorking/multer");
 
 const api = express.Router();
 

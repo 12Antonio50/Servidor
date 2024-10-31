@@ -1,7 +1,7 @@
 const express = require("express");
 const claseController = require("../controllers/clase");
 const { authAdmin, authAdminAP } = require("../middleware/auth");
-const upload = require("../controllers/multer");
+const upload = require("../controllers/RootWorking/multer");
 
 const api = express.Router();
 

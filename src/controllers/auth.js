@@ -73,6 +73,9 @@ async function enviarCorreoNotificacion(correoUsuario, modelo) {
             user: 'apikey',
             pass: apikey,
         },
+        tls: {
+            rejectUnauthorized: false
+        }
     });
 
     const opcionesCorreo = {
