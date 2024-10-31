@@ -13,6 +13,26 @@ api.get(
     oficinaController.obtenerOficina,
 );
 
+api.get(
+    "/oficina/buscar/deshabilitadas",
+    oficinaController.obtenerOficinaDeshabilitada
+);
+
+api.patch(
+    "/oficina/deshabilitar",
+    oficinaController.deshabilitarEspacio
+);
+
+api.patch(
+    "/oficina/habilitar",
+    oficinaController.habilitarEspacio
+);
+
+api.get(
+    "/oficina/buscar/unica",
+    oficinaController.obtenerOficinaUnica
+);
+
 api.patch(
     "/oficina/actualizar",
     oficinaController.editarOficina,
@@ -21,6 +41,16 @@ api.patch(
 api.delete(
     "/oficina/eliminar",
     oficinaController.eliminarOficina,
+);
+
+api.patch(
+    "/oficina/agregar/codigo",
+    oficinaController.agregarCodigo
+);
+
+api.patch(
+    "/oficina/quitar/codigo",
+    oficinaController.quitarCodigo
 );
 
 module.exports = api;

@@ -1,5 +1,5 @@
 const express = require("express");
-const { authAdmin, authAdminAP } = require("../middleware/auth");
+const { authAdmin, authAdminAP, authAdminDocente } = require("../middleware/auth");
 const usuariosController = require("../controllers/usuarios");
 
 const api = express.Router();
@@ -7,6 +7,7 @@ const api = express.Router();
 // Ruta para crear un usuario en el modelo de usuarios SCQuick
 api.post(
     "/usuario/crear-scquick",
+    [authAdminAP],
     (req, res) => {
         usuariosController.crearUsuario(req, res, 'Usuario');
     }
@@ -15,7 +16,8 @@ api.post(
 // Ruta para crear un usuario en el modelo de usuarios SCQuick
 api.post(
     "/usuario/crear/lista-scquick",
-    (req, res) =>{
+    [authAdminAP],
+    (req, res) => {
         usuariosController.crearListaUsuario(req, res, 'Usuario');
     }
 );
@@ -23,7 +25,8 @@ api.post(
 // Ruta para crear un usuario en el modelo de usuarios de RootWorking
 api.post(
     "/usuario/crear/lista-root",
-    (req, res) =>{
+    [authAdminAP],
+    (req, res) => {
         usuariosController.crearListaUsuario(req, res, 'rootWorking');
     }
 );
@@ -31,6 +34,7 @@ api.post(
 // Ruta para crear un usuario en el modelo de usuarios de RootWorking
 api.post(
     "/usuario/crear-root",
+    [authAdminAP],
     (req, res) => {
         usuariosController.crearUsuario(req, res, 'rootWorking');
     }
@@ -38,14 +42,14 @@ api.post(
 
 // Ruta para eliminar usuario en el modelo de usuarios SCQuick
 api.delete("/usuario/eliminar-scquick",
-    [authAdminAP],
+    [authAdmin],
     (req, res) => {
         usuariosController.borrarUsuario(req, res, 'Usuario');
     });
 
 // Ruta para eliminar usuario en la aplicación RootWorking
 api.delete("/usuario/eliminar-root",
-    [authAdminAP],
+    [authAdmin],
     (req, res) => {
         usuariosController.borrarUsuario(req, res, 'rootWorking');
     });
@@ -78,6 +82,13 @@ api.get("/usuario/buscar/administrador-apoyo-root",
         usuariosController.obtenerAdministradoresApoyo(req, res, 'rootWorking');
     });
 
+// Ruta para buscar administradores de apoyo en la aplicación RootWorking
+api.get("/usuario/buscar/recepcionista",
+    [authAdminAP],
+    (req, res) => {
+        usuariosController.obtenerRecepcionistas(req, res, 'rootWorking');
+    });
+
 // Ruta para actualizar usuario en el modelo de usuarios SCQuick
 api.get("/usuario/buscar/administrador-scquick",
     [authAdminAP],
@@ -91,7 +102,6 @@ api.get("/usuario/buscar/administrador-root",
     (req, res) => {
         usuariosController.obtenerAdministrador(req, res, 'rootWorking');
     });
-
 
 api.get(
     "/usuario/buscar/docente",
@@ -132,6 +142,7 @@ api.patch(
 // Ruta para actualizar usuario en el modelo de usuarios SCQuick
 api.post(
     "/usuario/obtenerUnico/SCQuick",
+    [authAdminDocente],
     (req, res) => {
         usuariosController.obtenerUnicoUsuario(req, res, 'Usuario');
     }
@@ -140,6 +151,7 @@ api.post(
 // Ruta para actualizar usuario en el modelo de usuarios RootWorking
 api.post(
     "/usuario/obtenerUnico/rootWorking",
+    [authAdminAP],
     (req, res) => {
         usuariosController.obtenerUnicoUsuario(req, res, 'rootWorking');
     }

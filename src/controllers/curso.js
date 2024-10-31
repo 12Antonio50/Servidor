@@ -2,6 +2,7 @@ const Curso = require("../models/curso");
 const Encuestas = require("../models/encuestas");
 const Usuario = require("../models/usuarios");
 const Publico = require("../models/publico");
+const Clase = require("../models/clase");
 const moment = require("moment");
 
 // Define una variable global para almacenar la última ejecución
@@ -433,6 +434,62 @@ async function cursosInactivosConNumeroPublico(req, res) {
     }
 }
 
+async function agregarClase(req, res) {
+    try {
+        const { curso, nombre } = req.body;
+
+        const claseEncontrada = await Clase.findOne({ nombre });
+
+        if (!claseEncontrada) {
+            return res.status(400).send({ msg: "Error al agregar la clase al curso, la clase no se encontro" });
+        }
+
+        //Agregar la clase al curso
+        const cursoActualizado = await Curso.findOneAndUpdate(
+            { curso },
+            { $push: { clase: nombre } },
+            { new: true }
+        );
+
+        const claseActualizada = await Clase.findOneAndUpdate(
+            { nombre: nombre },
+            { $set: { disponible: false } },
+        );
+
+        if (!cursoActualizado || !claseActualizada) {
+            return res.status(400).send({ msg: "Error al agregar la clase" });
+        } else {
+            return res.status(200).send({ msg: "Clase del curso actualizada" });
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).send({ msg: "Error interno del servidor" });
+    }
+}
+
+async function quitarClase(req, res) {
+    const { curso, clase } = req.body;
+
+    console.log(req.body);
+
+    try {
+        const cursoActualizado = await Curso.findOneAndUpdate(
+            { curso },
+            { $pull: { clase: clase } },
+            { new: true }
+        );
+
+        if (!cursoActualizado) {
+            return res.status(400).send({ msg: "Error al quitar la clase" });
+        }
+        console.log("Curso actualizado:", cursoActualizado);
+        return res.status(200).send({ msg: "Clase del curso actualizada" });
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).send({ msg: "Error interno del servidor" });
+    }
+}
+
 module.exports = {
     crearCurso,
     eliminarCurso,
@@ -445,5 +502,7 @@ module.exports = {
     quitarEstudiante,
     obtenerUnicoCurso,
     cursosActivosTodos,
-    cursosInactivosConNumeroPublico
+    cursosInactivosConNumeroPublico,
+    agregarClase,
+    quitarClase
 };

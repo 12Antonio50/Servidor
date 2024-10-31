@@ -1,6 +1,6 @@
 const express = require("express");
 const cursosController = require("../controllers/curso");
-const {authAdmin, authAdminAP} = require("../middleware/auth");
+const {authAdmin, authAdminAP, authAdminDocente} = require("../middleware/auth");
 
 const api = express.Router();
 
@@ -24,6 +24,7 @@ api.delete(
 
 api.get(
     "/cursos/buscar",
+    [authAdminDocente],
     cursosController.obtenerCursos
 );
 
@@ -50,6 +51,18 @@ api.patch(
     [authAdminAP],
     cursosController.agregarEncuesta
 );
+
+api.patch(
+    "/cursos/agregar-clase",
+    [authAdminAP, authAdminDocente],
+    cursosController.agregarClase
+);
+
+api.patch(
+    "/curso/quitar-clase",
+    [authAdminAP, authAdminDocente],
+    cursosController.quitarClase
+)
 
 api.patch(
     "/cursos/quitar-encueta",

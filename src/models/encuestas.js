@@ -8,6 +8,14 @@ const preguntasSchema = new mongoose.Schema({
     texto: String,
     tipo: String,
     opciones: [opcionesSchema],
+    minValue: {
+        type: Number, 
+        default: 0
+    }, 
+    maxValue: {
+        type: Number,
+        default: 0
+    }
 });
 
 const respuestasSchema = new mongoose.Schema({
@@ -37,10 +45,13 @@ const encuestasSchema = new mongoose.Schema({
             respuestasArray: [respuestasSchema],
         },
     ],
+    clase: {
+        type: String
+    },
     disponible: {
         type: Boolean,
         default: true,
-    },
+    }
 });
 
 module.exports = mongoose.model("encuestas", encuestasSchema);

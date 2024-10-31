@@ -5,7 +5,7 @@ const { SECRET_KEY } = process.env;
 
 function crearAccessToken(usuario) {
     const expToken = new Date();
-    expToken.setHours(expToken.getHours() +12);
+    expToken.setHours(expToken.getHours() +5);
     
     const payload = {
         token_type: "access",
@@ -19,7 +19,7 @@ function crearAccessToken(usuario) {
 
 function crearRefreshToken(usuario) {
     const expToken = new Date();
-    expToken.setMonth(expToken.getMonth() + 12);
+    expToken.setMonth(expToken.getMonth() + 5);
 
     const payload = {
         token_type: "refresh",

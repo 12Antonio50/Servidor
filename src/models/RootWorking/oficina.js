@@ -5,13 +5,26 @@ const oficinasRootWorkingSchema = new mongoose.Schema({
         unique: true,
         type: String
     },
-    costo: Number,
+    tipoEspacio: String,
+    costoBasico: Number,
+    numeroMaximoIntegrantes: Number,
+    costoIntermedio: Number,
+    costoPremium: Number,
     metrosCuadrados: Number,
     descripcion: String,
     disponible: {
         type: Boolean,
         default: true,
     },
+    deshabilitar: {
+        type: Boolean,
+        default: false,
+    },
+    caracteristicas: [],
+    servicios: [],
+    ubicacion: String,
+    imagen: [],
+    codigos: []
 });
 
 module.exports = mongoose.model("OficinaRootWorking", oficinasRootWorkingSchema);

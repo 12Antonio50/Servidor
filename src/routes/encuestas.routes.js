@@ -29,7 +29,7 @@ api.post(
 
 api.patch(
     "/encuestas/actualizar/encuesta",
-    [authAdmin],
+    [authAdminAP],
     encuestasController.actualizarEncuesta,
 );
 
@@ -64,6 +64,7 @@ api.post (
 
 api.post(
     "/encuesta/obtener/porcentaje/respuestas",
+    [authAdminAP],
     encuestasController.obtenerEncuestaMasContestadaPorMes,
 )
 

@@ -22,6 +22,7 @@ async function crearEncuesta(req, res) {
         //docente,
         preguntas,
         respuestas,
+        clase
     } = req.body;
 
     // Validación de los campos requeridos
@@ -41,6 +42,7 @@ async function crearEncuesta(req, res) {
         //docente,
         preguntas,
         respuestas,
+        clase
     });
 
     // Guardar la encuesta en la base de datos
@@ -66,6 +68,7 @@ async function actualizarEncuesta(req, res) {
         fecha,
         creador,
         preguntas,
+        clase
     } = req.body
 
     let titulo = "";
@@ -86,6 +89,7 @@ async function actualizarEncuesta(req, res) {
                     fecha,
                     creador,
                     preguntas,
+                    clase
                 },
             },
             { new: true }
@@ -262,7 +266,7 @@ async function enviarEncuesta(req, res) {
     try {
 
         const transporter = nodemailer.createTransport({
-            host: "smtp.office365.com",
+            host: "smtp.gmail.com",
             port: 587,
             secure: false,
             auth: {
@@ -272,7 +276,7 @@ async function enviarEncuesta(req, res) {
         });
 
         const opcionesCorreo = {
-            from: OUTLOOK_EMAIL, // Asegúrate de reemplazar "OUTLOOK_EMAIL" con la dirección de correo electrónico correcta
+            from: OUTLOOK_EMAIL,
             to: correo,
             subject: "Participación en la encuesta",
             text: `Estimado usuario,\n\nTe invitamos a participar en una encuesta. Haz clic en el siguiente enlace para acceder:\n\n${url}\n\nGracias por tu participación.`,

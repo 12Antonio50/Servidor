@@ -19,7 +19,6 @@ Administrador
 Funcion para registrar un nuevo ususario (Sugerencia de uso: un formulario)
 Manda un email al correo del usuario con los datos con los que fue registrado
 */
-
 async function crearUsuario(req, res, modelo) {
     const {
         correo,
@@ -31,12 +30,12 @@ async function crearUsuario(req, res, modelo) {
         rol,
     } = req.body;
 
-    if (!correo) res.status(400).send({ msg: "Correo es requerido" });
-    if (!nombre) res.status(400).send({ msg: "Nombre es requerido" });
-    if (!apellido_paterno) res.status(400).send({ msg: "Apellido paterno es requerido" });
-    if (!apellido_materno) res.status(400).send({ msg: "Apellido materno es requerido" });
-    if (!area) res.status(400).send({ msg: "Area es requerido" });
-    if (!rol) res.status(400).send({ msg: "Rol es requerido" });
+    if (!correo) return res.status(400).send({ msg: "Correo es requerido" });
+    if (!nombre) return res.status(400).send({ msg: "Nombre es requerido" });
+    if (!apellido_paterno) return res.status(400).send({ msg: "Apellido paterno es requerido" });
+    if (!apellido_materno) return res.status(400).send({ msg: "Apellido materno es requerido" });
+    if (!area) return res.status(400).send({ msg: "Área es requerida" });
+    if (!rol) return res.status(400).send({ msg: "Rol es requerido" });
 
     const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
     let password = "";
@@ -49,11 +48,14 @@ async function crearUsuario(req, res, modelo) {
     const salt = bcrypt.genSaltSync(10);
     const hashPassword = bcrypt.hashSync(password, salt);
 
-    // Determinar qué modelo de usuario utilizar
+    // Determinar qué modelo de usuario utilizar y establecer la URL base
+    let baseUrl = ""; // Variable para almacenar la URL base
     if (modelo === 'rootWorking') {
         modelo = UsuariosRoot;
+        baseUrl = "https://espacios.rootworking.mx/"; // URL para rootWorking
     } else {
         modelo = Usuario;
+        baseUrl = "https://rlgjvn6n-3000.usw3.devtunnels.ms/"; // URL para otros usuarios
     }
 
     const usuario = new modelo({
@@ -80,6 +82,9 @@ async function crearUsuario(req, res, modelo) {
         case "C":
             areaNombre = "Contaduría";
             break;
+        case "R":
+            areaNombre = "Recepción";
+            break;
     }
 
     switch (rol) {
@@ -92,6 +97,9 @@ async function crearUsuario(req, res, modelo) {
         case "D":
             rolNombre = "Docente";
             break;
+        case "R":
+            rolNombre = "Recepcionista";
+            break;
     }
 
     try {
@@ -100,7 +108,7 @@ async function crearUsuario(req, res, modelo) {
 
         // Envío del correo
         const transporter = nodemailer.createTransport({
-            host: "smtp.office365.com",
+            host: "smtp.gmail.com",
             port: 587,
             secure: false,
             auth: {
@@ -109,15 +117,18 @@ async function crearUsuario(req, res, modelo) {
             },
         });
 
+        // Construir el mensaje del correo incluyendo la URL específica
+        const correoMensaje = `Nos complace informarle que se ha creado una cuenta para usted en nuestra aplicación de encuestas con los siguientes datos:\n\nNombre: ${nombre}\nApellido paterno: ${apellido_paterno}\nApellido materno: ${apellido_materno}\nCorreo: ${correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${password}\n\nDiríjase al siguiente enlace para iniciar sesión: ${baseUrl} Esta designación le otorga privilegios adicionales para colaborar en la gestión y supervisión de encuestas en nuestra plataforma.`;
+
         const opcionesCorreo = {
             from: OUTLOOK_EMAIL,
             to: correo,
             subject: "Creación de cuenta en la aplicación de encuestas QUICK POLLS",
-            text: `Nos complace informarle que se ha creado una cuenta para usted en nuestra aplicación de encuestas con los siguientes datos:\n\n\nNombre: ${nombre}\nApellido paterno: ${apellido_paterno}\nApellido materno: ${apellido_materno}\nCorreo: ${correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${password}\n\n\nDiríjase al siguiente enlace para iniciar sesión: https://rlgjvn6n-3000.usw3.devtunnels.ms/ Esta designación le otorga privilegios adicionales para colaborar en la gestión y supervisión de encuestas en nuestra plataforma.`,
+            text: correoMensaje,
         };
 
         const infoCorreo = await transporter.sendMail(opcionesCorreo);
-        //console.log("Correo enviado", infoCorreo);
+        console.log("Correo enviado", infoCorreo);
 
         res.status(200).send({
             msg: "Usuario registrado, se ha enviado un email a su correo",
@@ -138,7 +149,7 @@ async function crearListaUsuario(req, res, modelo) {
 
     // Envío del correo
     const transporter = nodemailer.createTransport({
-        host: "smtp.office365.com",
+        host: "smtp.gmail.com",
         port: 587,
         secure: false,
         auth: {
@@ -168,12 +179,16 @@ async function crearListaUsuario(req, res, modelo) {
     }
 
     try {
-        // Determinar qué modelo de usuario utilizar
+        // Determinar qué modelo de usuario utilizar y establecer la URL base
+        let baseUrl = ""; // Variable para almacenar la URL base
         if (modelo === 'rootWorking') {
             modelo = UsuariosRoot;
+            baseUrl = "https://espacios.rootworking.mx/"; // URL para rootWorking
         } else {
             modelo = Usuario;
+            baseUrl = "https://rlgjvn6n-3000.usw3.devtunnels.ms/"; // URL para otros usuarios
         }
+
         const usuariosCreados = await modelo.insertMany(usuariosArray);
 
         // Función para enviar correos electrónicos con control de tasa de envío
@@ -184,17 +199,19 @@ async function crearListaUsuario(req, res, modelo) {
                 let areaNombre = area === 'A' ? 'Administración' : 'Contaduría';
                 let rolNombre = rol === 'A' ? 'Administrador' : rol === 'AP' ? 'Administrador de apoyo' : 'Docente';
 
+                // Construir el mensaje del correo incluyendo la URL específica
+                let correoMensaje = `Nos complace informarle que se ha creado una cuenta para usted con los siguientes datos:\n\nNombre: ${nombre}\nApellido paterno: ${apellido_paterno}\nApellido materno: ${apellido_materno}\nCorreo: ${correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${passwordArray[k]}\n\n\nDiríjase al siguiente enlace para iniciar sesión: ${baseUrl} Esta designación le otorga privilegios adicionales para colaborar en la gestión y supervisión en nuestra plataforma.`;
+
                 let opcionesCorreo = {
                     from: OUTLOOK_EMAIL,
                     to: correo,
-                    subject: "Creación de cuenta en la aplicación de encuestas QUICK POLLS",
-                    text: `Nos complace informarle que se ha creado una cuenta para usted en nuestra aplicación de encuestas con los siguientes datos:\n\n\nNombre: ${nombre}\nApellido paterno: ${apellido_paterno}\nApellido materno: ${apellido_materno}\nCorreo: ${correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${passwordArray[k]}\n\n\nDiríjase al siguiente enlace para iniciar sesión: https://rlgjvn6n-3000.usw3.devtunnels.ms/ Esta designación le otorga privilegios adicionales para colaborar en la gestión y supervisión de encuestas en nuestra plataforma.`,
+                    subject: "Creación de cuenta en la plataforma",
+                    text: correoMensaje,
                 };
 
                 // Enviar correo con control de tasa
                 try {
                     await transporter.sendMail(opcionesCorreo);
-                    //(`Correo enviado a ${correo}`);
                 } catch (error) {
                     console.error(`Error al enviar el correo a ${correo}:`, error);
                 }
@@ -215,6 +232,7 @@ async function crearListaUsuario(req, res, modelo) {
         res.status(400).send({ msg: "Error al cargar la lista de usuarios" });
     }
 }
+
 
 
 /*
@@ -333,6 +351,32 @@ async function obtenerAdministradoresApoyo(req, res, UsuarioModelo) {
     }
 }
 
+/*
+Administrador 
+Función para obteber a todos los administradores de apoyo
+*/
+async function obtenerRecepcionistas(req, res, UsuarioModelo) {
+    // Determinar qué modelo de usuario utilizar
+    if (UsuarioModelo === 'rootWorking') {
+        UsuarioModelo = UsuariosRoot;
+    } else {
+        UsuarioModelo = Usuario;
+    }
+    try {
+        const response = await UsuarioModelo.find({ rol: "R" });
+
+        // Eliminar la contraseña de la respuesta para no enviarla al cliente
+        for (let i = 0; i < response.length; i++) {
+            response[i].password = undefined;
+        }
+
+        res.status(200).send(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ msg: "Error del servidor" });
+    }
+}
+
 
 /*
 Adminstrador
@@ -389,27 +433,30 @@ async function obtenerUnicoUsuario(req, res, modelo) {
 }
 
 
-//Función para volver a enviar correo de registro donde viene la password generada automaticamente para poder iniciar sesión
+// Función para volver a enviar correo de registro donde viene la password generada automaticamente para poder iniciar sesión
 async function reenviarCorreo(req, res, UsuarioModelo) {
     const { correo } = req.body;
 
     const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-
     let password = "";
 
     for (let i = 0; i < 17; i++) {
         let index = Math.floor(Math.random() * caracteres.length);
         password += caracteres.charAt(index);
     }
+
     // Hasheo de password
     const salt = bcrypt.genSaltSync(10);
     const hashPassword = bcrypt.hashSync(password, salt);
 
     // Determinar qué modelo de usuario utilizar
+    let baseUrl = "";  // Variable para almacenar la URL base
     if (UsuarioModelo === 'rootWorking') {
         UsuarioModelo = UsuariosRoot;
+        baseUrl = "https://espacios.rootworking.mx/";  // URL para rootWorking
     } else {
         UsuarioModelo = Usuario;
+        baseUrl = "https://otra.url/";  // URL para otros usuarios
     }
 
     try {
@@ -432,6 +479,9 @@ async function reenviarCorreo(req, res, UsuarioModelo) {
             case "C":
                 areaNombre = "Contaduría";
                 break;
+            case "R":
+                areaNombre = "Recepción";
+                break;
         }
 
         switch (usuarioResponse.rol) {
@@ -444,11 +494,22 @@ async function reenviarCorreo(req, res, UsuarioModelo) {
             case "D":
                 rolNombre = "Docente";
                 break;
+            case "R":
+                rolNombre = "Recepcionista";
+                break;
+        }
+
+        // Definir el contenido del correo dependiendo del modelo
+        let correoMensaje = "";
+        if (UsuarioModelo === UsuariosRoot) {
+            correoMensaje = `Nos complace informarle que se ha actualizado su cuenta en RootWorking con los siguientes datos:\n\nNombre: ${usuarioResponse.nombre}\nApellido paterno: ${usuarioResponse.apellido_paterno}\nApellido materno: ${usuarioResponse.apellido_materno}\nCorreo: ${usuarioResponse.correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${password}\n\nEsta designación le otorga privilegios en la plataforma RootWorking.\n\nPuede acceder a su cuenta aquí: ${baseUrl}`;
+        } else {
+            correoMensaje = `Nos complace informarle que se ha actualizado su cuenta en la aplicación de encuestas QUICK POLLS con los siguientes datos:\n\nNombre: ${usuarioResponse.nombre}\nApellido paterno: ${usuarioResponse.apellido_paterno}\nApellido materno: ${usuarioResponse.apellido_materno}\nCorreo: ${usuarioResponse.correo}\nÁrea: ${areaNombre}\nRol: ${rolNombre}\nContraseña: ${password}\n\nEsta designación le otorga privilegios en la plataforma.\n\nPuede acceder a su cuenta aquí: ${baseUrl}`;
         }
 
         // Envío de correo al usuario con la contraseña actualizada
         const transporter = nodemailer.createTransport({
-            host: "smtp.office365.com", // Cambiar al host de Outlook si es diferente
+            host: "smtp.gmail.com",
             port: 587,
             secure: false, // Iniciar con false para iniciar una conexión no segura
             auth: {
@@ -461,8 +522,8 @@ async function reenviarCorreo(req, res, UsuarioModelo) {
         const opcionesCorreo = {
             from: OUTLOOK_EMAIL,
             to: usuarioResponse.correo,
-            subject: "Actualización de cuenta de la aplicación de encuestas QUICK POLLS",
-            text: `Nos complace informarle que se ha actualiado su cuenta en la aplicación de encuestas con los siguientes datos:\n\n\nNombre: ${usuarioResponse.nombre}\nApellido paterno: ${usuarioResponse.apellido_paterno}\nApellido materno: ${usuarioResponse.apellido_materno}\nCorreo: ${usuarioResponse.correo}\nÁrea: ${areaNombre} \nRol: ${rolNombre}\nContraseña: ${password}\n\n\nEsta designación le otorga privilegios en la plataforma.`,
+            subject: "Actualización de cuenta",
+            text: correoMensaje,
         };
 
         // Actualizar la contraseña en la base de datos
@@ -478,7 +539,6 @@ async function reenviarCorreo(req, res, UsuarioModelo) {
                 console.log("Error al enviar el correo", error);
                 res.status(400).send({ msg: "Error al reenviar el correo al usuario" });
             } else {
-                //console.log("Correo enviado", info);
                 res.status(200).send({ msg: "Se ha reenviado el correo al usuario" });
             }
         });
@@ -487,6 +547,7 @@ async function reenviarCorreo(req, res, UsuarioModelo) {
         res.status(500).send({ msg: "Error al reenviar el correo al usuario" });
     }
 }
+
 
 /**
  * Administrador y administrador de apoyo
@@ -574,5 +635,6 @@ module.exports = {
     reenviarCorreo,
     agregarCurso,
     quitarCursos,
-    crearListaUsuario
+    crearListaUsuario,
+    obtenerRecepcionistas
 }

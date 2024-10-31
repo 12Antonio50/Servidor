@@ -25,6 +25,10 @@ const cursoSchema = new mongoose.Schema({
     publico: {
         type: [String],
         default: [],
+    },
+    clase: {
+        type: [String],
+        default: [],
     }
 });
 

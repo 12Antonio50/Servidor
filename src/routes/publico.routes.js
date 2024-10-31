@@ -1,5 +1,5 @@
 const express = require("express");
-const { authAdminAP } = require("../middleware/auth");
+const { authAdminAP, authAdmin } = require("../middleware/auth");
 const publicoController = require("../controllers/publico");
 
 const api = express.Router();
@@ -18,7 +18,7 @@ api.get(
 
 api.delete(
     "/publico/eliminar",
-    [authAdminAP],
+    [authAdmin],
     publicoController.eliminarPublico,
 );
 
@@ -42,6 +42,7 @@ api.post(
 
 api.post(
     "/publico/obtener/porcentaje/respuestas",
+    [authAdminAP],
     publicoController.obtenerPublicocreados,
 )
 
