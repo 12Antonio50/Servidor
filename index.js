@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const mongoose = require("mongoose");
-const app = require("./app");
+const app = require("./src/app");
 
 // Usar variables de entorno
 const { 
