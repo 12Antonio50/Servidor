@@ -1,7 +1,7 @@
 require('dotenv').config();
 
-const Codigos = require("../../models/RootWorking/codigos");
-const Oficinas = require("../../models/RootWorking/oficina");
+const Codigos = require("../models/RootWorking/codigos");
+const Oficinas = require("../models/RootWorking/oficina");
 const {
     OUTLOOK_EMAIL,
     user_SendGrid,

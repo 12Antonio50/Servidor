@@ -1,6 +1,6 @@
 const express = require("express");
-const { authAdminAP, authAdminRecepcionista} = require("../../middleware/auth");
-const codigosController = require("../../controllers/RootWorking/codigos");
+const { authAdminAP, authAdminRecepcionista} = require("../middleware/auth");
+const codigosController = require("../controllers/codigos");
 
 const api = express.Router();
 

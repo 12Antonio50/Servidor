@@ -1,6 +1,6 @@
 const express = require("express");
-const espacioController = require("../../controllers/RootWorking/inmueble");
-const {authAdmin, authAdminAP } = require("../../middleware/auth");
+const espacioController = require("../controllers/inmueble");
+const {authAdmin, authAdminAP } = require("../middleware/auth");
 
 const api = express.Router();
 

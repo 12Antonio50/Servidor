@@ -1,6 +1,6 @@
-const Espacio = require("../../models/RootWorking/espacio");
-const Oficina = require("../../models/RootWorking/oficina");
-const Codigo = require("../../models/RootWorking/codigos");
+const Espacio = require("../models/RootWorking/espacio");
+const Oficina = require("../models/RootWorking/oficina");
+const Codigo = require("../models/RootWorking/codigos");
 
 // Función para crear un inmueble
 async function crearInmueble(req, res) {

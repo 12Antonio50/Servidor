@@ -1,6 +1,6 @@
-const Oficina = require("../../models/RootWorking/oficina");
-const Codigos = require("../../models/RootWorking/codigos");
-const Espacio = require("../../models/RootWorking/espacio");
+const Oficina = require("../models/RootWorking/oficina");
+const Codigos = require("../models/RootWorking/codigos");
+const Espacio = require("../models/RootWorking/espacio");
 const fs = require("fs");
 const path = require('path');
 

@@ -25,9 +25,9 @@ const cursosRoutes = require("./routes/cursos.routes");
 const respuestasRoutes = require("./routes/respuestas.routes");
 const claseRoutes = require("./routes/clase.routes");
 // Root Working
-const espaciosRoutes = require("./routes/RootWorking/espacio.routes");
-const oficinaRoutes = require("./routes/RootWorking/oficina.routes");
-const codigosRoutes = require("./routes/RootWorking/codigos.routes");
+const espaciosRoutes = require("./routes/espacio.routes");
+const oficinaRoutes = require("./routes/oficina.routes");
+const codigosRoutes = require("./routes/codigos.routes");
 
 // Configurar header http - cors
 app.use(cors());
