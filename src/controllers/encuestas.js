@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const Curso = require("../models/curso");
 const Encuestas = require("../models/encuestas");
 const {
     OUTLOOK_EMAIL,
@@ -101,7 +101,7 @@ async function actualizarEncuesta(req, res) {
 
             //Actualizar la referencia en el modelo del cuerso si el nombre de la encuesta cambia
             if (tituloOriginal !== titulo) {
-                const resultado = await Encuestas.updateMany(
+                const resultado = await Curso.updateMany(
                     { encuestas: tituloOriginal },
                     { $set: { 'encuestas.$[elem]': titulo } },
                     { arrayFilters: [{ 'elem': tituloOriginal }] }
