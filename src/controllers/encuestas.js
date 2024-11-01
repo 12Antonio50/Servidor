@@ -98,6 +98,17 @@ async function actualizarEncuesta(req, res) {
         if (!encuestaActualizada) {
             res.status(400).send({ msg: "Error al actualizar los datos de la encuesta" });
         } else {
+
+            //Actualizar la referencia en el modelo del cuerso si el nombre de la encuesta cambia
+
+            if (tituloOriginal !== titulo) {
+                const resultado = await Encuestas.updateMany(
+                    { encuestas: tituloOriginal },
+                    { $set: { 'encuestas.$[elem]': titulo } },
+                    { arrayFilters: [{ 'elem': tituloOriginal }] }
+                );
+            }
+
             res.status(200).send({ msg: "Datos actualizados de la encuesta" });
         }
     } catch (error) {
