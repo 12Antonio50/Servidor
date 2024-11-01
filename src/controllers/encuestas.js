@@ -100,7 +100,6 @@ async function actualizarEncuesta(req, res) {
         } else {
 
             //Actualizar la referencia en el modelo del cuerso si el nombre de la encuesta cambia
-
             if (tituloOriginal !== titulo) {
                 const resultado = await Encuestas.updateMany(
                     { encuestas: tituloOriginal },
@@ -112,7 +111,8 @@ async function actualizarEncuesta(req, res) {
             res.status(200).send({ msg: "Datos actualizados de la encuesta" });
         }
     } catch (error) {
-        throw error;
+        console.error("Error al actualizar la encuesta", error);
+        res.status(500).send({ msg: "Error en el servidor", error });
     }
 }
 
