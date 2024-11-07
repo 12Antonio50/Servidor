@@ -85,7 +85,7 @@ api.patch(
 api.post(
     "/cursos/porcentaje/publico",
     [authAdminAP],
-    cursosController.cursosInactivosConNumeroPublico
+    cursosController.cursosActivosConNumeroPublico
 )
 
 module.exports = api;
