@@ -403,37 +403,35 @@ async function cursosActivosTodos(req, res) {
     }
 }
 
-async function cursosInactivosConNumeroPublico(req, res) {
+async function cursosActivosConNumeroPublico(req, res) {
     try {
-        // Buscar los cursos cuya disponibilidad sea false
-        const cursosInactivos = await Curso.find({ disponible: false });
+        // Buscar los cursos cuya disponibilidad sea true
+        const cursosActivos = await Curso.find({ disponible: true });
 
         // Mapear los cursos para agregar el número de público y los nombres del público
-        const cursosConNumeroPublico = cursosInactivos.map(curso => ({
+        const cursosConNumeroPublico = cursosactivos.map(curso => ({
             ...curso._doc,
             numeroPublico: curso.publico.length,
-            nombresPublico: curso.publico.map(p => p.nombre) // Asumiendo que cada objeto en curso.publico tiene un campo 'nombre'
+            nombresPublico: curso.publico.map(p => p.nombre)
         }));
 
-        // Verificar si hay cursos inactivos disponibles
+        // Verificar si hay cursos activos disponibles
         if (cursosConNumeroPublico.length === 0) {
             res.status(400).send({
-                msg: "Error, no se encontraron cursos inactivos",
+                msg: "Error, no se encontraron cursos activos",
             });
         } else {
-            // Enviar la lista de cursos inactivos con el número de público y los nombres del público como respuesta
+            // Enviar la lista de cursos activos con el número de público y los nombres del público como respuesta
             res.status(200).send(cursosConNumeroPublico);
-            //console.log("Cursos", cursosConNumeroPublico)
         }
     } catch (error) {
         // Manejar posibles errores durante la ejecución
-        console.error("Error al buscar cursos inactivos:", error);
+        console.error("Error al buscar cursos activos:", error);
         res.status(500).send({
             msg: "Ocurrió un error interno al buscar cursos inactivos",
         });
     }
 }
-
 async function agregarClase(req, res) {
     try {
         const { curso, nombre } = req.body;
@@ -502,7 +500,7 @@ module.exports = {
     quitarEstudiante,
     obtenerUnicoCurso,
     cursosActivosTodos,
-    cursosInactivosConNumeroPublico,
+    cursosActivosConNumeroPublico,
     agregarClase,
     quitarClase
 };
