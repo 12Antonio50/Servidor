@@ -406,7 +406,7 @@ async function cursosActivosTodos(req, res) {
 async function cursosInactivosConNumeroPublico(req, res) {
     try {
         // Buscar los cursos cuya disponibilidad sea false
-        const cursosInactivos = await Curso.find({ disponible: false });
+        const cursosInactivos = await Curso.find({ disponible: true });
 
         // Mapear los cursos para agregar el número de público y los nombres del público
         const cursosConNumeroPublico = cursosInactivos.map(curso => ({
