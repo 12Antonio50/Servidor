@@ -409,7 +409,7 @@ async function cursosActivosConNumeroPublico(req, res) {
         const cursosActivos = await Curso.find({ disponible: true });
 
         // Mapear los cursos para agregar el número de público y los nombres del público
-        const cursosConNumeroPublico = cursosactivos.map(curso => ({
+        const cursosConNumeroPublico = cursosActivos.map(curso => ({
             ...curso._doc,
             numeroPublico: curso.publico.length,
             nombresPublico: curso.publico.map(p => p.nombre)
@@ -428,10 +428,11 @@ async function cursosActivosConNumeroPublico(req, res) {
         // Manejar posibles errores durante la ejecución
         console.error("Error al buscar cursos activos:", error);
         res.status(500).send({
-            msg: "Ocurrió un error interno al buscar cursos inactivos",
+            msg: "Ocurrió un error interno al buscar cursos activos",
         });
     }
 }
+
 async function agregarClase(req, res) {
     try {
         const { curso, nombre } = req.body;
