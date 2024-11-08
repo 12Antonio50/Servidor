@@ -45,16 +45,20 @@ async function obtenerPorcentajesGenerales(req, res) {
                 });
             });
 
-            // Calcular los porcentajes
+            // Calcular los porcentajes y redondear
             const porcentajesOpcionMultiple = {};
             Object.keys(conteoRespuestas).forEach(opcion => {
-                porcentajesOpcionMultiple[opcion] = totalRespuestas > 0 ? (conteoRespuestas[opcion] / totalRespuestas) * 100 : 0;
+                // Redondeo de los porcentajes individualmente
+                porcentajesOpcionMultiple[opcion] = totalRespuestas > 0
+                    ? Math.round((conteoRespuestas[opcion] / totalRespuestas) * 100) // Redondear a porcentaje
+                    : 0;
             });
 
+            // Agregar la pregunta y los porcentajes al resultado
             resultados.push({
                 pregunta: pregunta.texto,
                 tipo: 'opcionMultiple',
-                porcentajes: Math.round(porcentajesOpcionMultiple),
+                porcentajes: porcentajesOpcionMultiple, // Ya contiene los porcentajes redondeados
             });
         });
 
