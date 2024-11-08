@@ -44,7 +44,19 @@ async function crearPublicoIndidual(req, res) {
 async function crearListaPublico(req, res) {
     const publicoArray = req.body;
 
+    const correoPublico = publicoArray.map(publico => publico.correo);
+
     try {
+
+        const publicoExistente = await Publico.find({ correo: { $in: correoPublico } });
+
+        if (publicoExistente.length > 0) {
+            const correosDuplicados = publicoExistente.map(publico => publico.correo);
+            return res.status(400).send({
+                msg: "Los siguentes alumnos ya se encuentran registrado: " + correosDuplicados.join(', ')
+            });
+        }
+
         const publicoCreado = await Publico.insertMany(publicoArray);
 
         res
