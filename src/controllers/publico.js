@@ -14,6 +14,12 @@ async function crearPublicoIndidual(req, res) {
     if (!correo) res.status(400).send({ msg: "Correo es requerido" });
     if (!fecha) res.status(400).send({ msg: "Fecha es requerido" });
 
+    const publicoExiste = await Publico.findOne({ correo: correo });
+
+    if (publicoExiste) {
+        return res.status(400).send({ msg: "El alumno que esta intentando crear ya existe" })
+    }
+
     // Crear una nueva instancia del publico
     const publico = new Publico({
         nombre,
