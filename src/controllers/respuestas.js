@@ -54,7 +54,7 @@ async function obtenerPorcentajesGenerales(req, res) {
             resultados.push({
                 pregunta: pregunta.texto,
                 tipo: 'opcionMultiple',
-                porcentajes: porcentajesOpcionMultiple,
+                porcentajes: Math.round(porcentajesOpcionMultiple),
             });
         });
 
